@@ -1,0 +1,68 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// Structure to store encryption details
+struct EncryptionDetails {
+    string inputText;
+    string key;
+    int shift;
+    string caesarEncrypted;
+    string finalEncrypted;
+};
+
+// Function to perform Caesar Cipher encryption
+string caesarCipher(string text, int shift) {
+    string result = "";
+    for (char c : text) {
+        if (isalpha(c)) {
+            char base = isupper(c) ? 'A' : 'a';
+            result += char(int(base + (c - base + shift) % 26));
+        } else {
+            result += c;
+        }
+    }
+    return result;
+}
+
+// Function to perform Vigenère Cipher encryption
+string vigenereCipher(string text, string key) {
+    string result = "";
+    int keyLength = key.length();
+    int keyIndex = 0;
+    
+    for (char c : text) {
+        if (isalpha(c)) {
+            char base = isupper(c) ? 'A' : 'a';
+            int keyShift = tolower(key[keyIndex % keyLength]) - 'a';
+            result += char(int(base + (c - base + keyShift) % 26));
+            keyIndex++;
+        } else {
+            result += c;
+        }
+    }
+    return result;
+}
+
+int main() {
+    EncryptionDetails enc;
+    
+    // User input
+    cout << "Enter the text to encrypt: ";
+    cin >> enc.inputText;
+    cout << "Enter the shift value for Caesar Cipher: ";
+    cin >> enc.shift;
+    cout << "Enter the keyword for Vigenere Cipher: ";
+    cin >> enc.key;
+    
+    // Step 1: Apply Caesar Cipher
+    enc.caesarEncrypted = caesarCipher(enc.inputText, enc.shift);
+    cout << "\nCaesar Encrypted Text: " << enc.caesarEncrypted << endl;
+    
+    // Step 2: Apply Vigenère Cipher
+    enc.finalEncrypted = vigenereCipher(enc.caesarEncrypted, enc.key);
+    cout << "Final Encrypted Text: " << enc.finalEncrypted << endl;
+    
+    return 0;
+}
